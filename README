@@ -1,2 +1,4 @@
-All good
+This is a simple shell that supports any standard shell command.
 
+Run the shell in the terminal with the command
+make && ./myshell
