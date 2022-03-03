@@ -35,7 +35,6 @@ void changeInput(char* path)
 {
     int in;
     if((in = open(path, O_RDONLY)) == -1) {
-        //myPrint("in 1\n");
         myError();
         exit(1);
     }
@@ -65,13 +64,11 @@ int tooLong(char *cmd_buff)
         if (cmd_buff[513] != '\n') {
             char arb_buff[2048];
             if (fgets(arb_buff, 2048, stdin) == NULL) {
-                //myPrint("in 2\n");
                 myError();
                 exit(1);
             } 
             myPrint(arb_buff);
         }
-        //myPrint("in 3\n");
         myError();
         return 1;
     }
@@ -130,7 +127,6 @@ int executeBuiltIn(int argc, char **argv)
     /* exit */
     if (!strcmp(arg, "exit")) {
         if (argc != 1) {
-            //myPrint("in 4\n");
             myError();
             return 1;
         }
@@ -140,13 +136,11 @@ int executeBuiltIn(int argc, char **argv)
     /* pwd */
     if (!strcmp(arg, "pwd")) {
         if (argc != 1) {
-            //myPrint("in 5\n");
             myError();
             return 1;
         }
         char buff[200];
         if (getcwd(buff, 200) == NULL) {
-            //myPrint("in 6\n");
             myError();
             return 1;
         }
@@ -158,7 +152,6 @@ int executeBuiltIn(int argc, char **argv)
     /* cd */
     if (!strcmp(arg, "cd"))  {
         if (argc > 2) {
-            //myPrint("in 7\n");
             myError();
             return 1;
         }
@@ -170,12 +163,10 @@ int executeBuiltIn(int argc, char **argv)
             path = argv[1];
         }
         if (path == NULL) {
-            //myPrint("in 8\n");
             myError();
             return 1;
         }
         if (chdir(path)) { //chdir returns 0 on success
-            //myPrint("in 9\n");
             myError();
         }
         return 1;
@@ -193,7 +184,6 @@ int setupAdvRdr(char* path)
     path = "pleasedeargoddonotlettherebeafilewiththisnameohsweetbabyjesus";
 
     if((out = open(path, O_CREAT|O_WRONLY, S_IWUSR|S_IRUSR)) == -1) {
-        //myPrint("in 10\n");
         myError();
         return -1;
     }
@@ -218,7 +208,6 @@ int setupAdvRdr(char* path)
         }
 
         if(rename(path, truepath) == -1) {
-            //myPrint("in 12\n");
             myError();
             exit(1);
         }
@@ -279,7 +268,6 @@ char** redirect(int argc, char **argv)
     }
     
     if (dup2(out, STDOUT_FILENO) == -1) {
-        //myPrint("in 13\n");
         myError();
         exit(1);
     }
@@ -294,13 +282,11 @@ void executeCommand(int argc, char **argv)
 {
     
     if((argv = redirect(argc, argv)) == NULL) { //Something went wrong with redirection
-        //myPrint("in 14\n");
         myError(); 
         exit(1);
     }
 
     if((execvp(argv[0], argv)) == -1) { //Something went wrong with executing the command
-        //myPrint("in 15\n");
         myError();
         exit(1);
     }
@@ -326,7 +312,6 @@ void execute(int argc, char **argv)
         waitpid(pid, &status, 0);
     } 
     else {
-        //myPrint("in 16\n");
         myError();
         exit(1);
     }
@@ -337,7 +322,6 @@ int main(int argc, char *argv[])
 {
 
     if(argc > 2) {
-        //myPrint("in 17\n");
         myError();
         exit(1);
     }
@@ -374,14 +358,7 @@ int main(int argc, char *argv[])
         for (cmd = strtok_r(cmd_buff,";",&sbuff); cmd; cmd = strtok_r(NULL,";",&sbuff)) {
             
             cmd_argv = getCommand(&cmd_argc, cmd);
-/*
-            myPrint("   Printing args\n");
-            int i;
-            for(i = 0; i < cmd_argc; i++) {
-                myPrint(cmd_argv[i]);
-                myPrint("\n");
-            }
-*/
+
             if(*cmd_argv != NULL) { //More than just a single NULL
                 execute(cmd_argc, cmd_argv);
             }
