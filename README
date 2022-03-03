@@ -1,4 +1,4 @@
-This is a simple shell that supports any standard shell command.
+This is a simple shell that supports any standard bash command.
 
 Run the shell in the terminal with the command
 make && ./myshell
